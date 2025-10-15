@@ -65,10 +65,10 @@ function VistaPami() {
 			{/* Header */}
 			<div className="absolute top-0 left-0 right-0 z-20 pt-8 px-8 text-center">
 				<h1 className="text-6xl font-bold text-white mb-4 drop-shadow-2xl">
-					SEDE PAMI
+					{/* SEDE PAMI */}
 				</h1>
 				<p className="text-2xl text-gray-300 font-light">
-					Clinical House - Excelencia Médica
+					{/* Clinical House - Excelencia Médica */}
 				</p>
 			</div>
 
@@ -142,7 +142,7 @@ function VistaPami() {
 			{/* Footer */}
 			<div className="absolute bottom-0 left-0 right-0 z-20 pb-6 px-8 text-center">
 				<p className="text-xl text-gray-400 font-light">
-					www.clinicalhouse.co • +57 123 456 7890
+					{/* www.clinicalhouse.co • +57 123 456 7890 */}
 				</p>
 			</div>
 		</div>
