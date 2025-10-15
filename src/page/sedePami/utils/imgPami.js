@@ -1,5 +1,5 @@
 const IMG_PAMI = [
-  "/Fachada-PAMI.webp",
+  "/pami/pami.jpeg",
   "/pami/l.jpg",
   "/pami/m.jpg",
   "/pami/x.jpg",
