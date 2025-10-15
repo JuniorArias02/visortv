@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight, Expand, Minimize } from "lucide-react";
 import IMG_PAMI from "./utils/imgPami";
+
 function VistaPami() {
 	const [currentSlide, setCurrentSlide] = useState(0);
+	const [isFullscreen, setIsFullscreen] = useState(false);
+	const containerRef = useRef(null);
 
 	const slides = IMG_PAMI;
 
@@ -12,7 +15,6 @@ function VistaPami() {
 			img.src = src;
 		});
 	}, []);
-
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -29,8 +31,37 @@ function VistaPami() {
 		setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 	};
 
+	const toggleFullscreen = () => {
+		if (!document.fullscreenElement) {
+			containerRef.current.requestFullscreen().catch(err => {
+				console.error(`Error attempting to enable fullscreen: ${err.message}`);
+			});
+			setIsFullscreen(true);
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+				setIsFullscreen(false);
+			}
+		}
+	};
+
+	// Escuchar cambios en el estado de pantalla completa
+	useEffect(() => {
+		const handleFullscreenChange = () => {
+			setIsFullscreen(!!document.fullscreenElement);
+		};
+
+		document.addEventListener('fullscreenchange', handleFullscreenChange);
+		return () => {
+			document.removeEventListener('fullscreenchange', handleFullscreenChange);
+		};
+	}, []);
+
 	return (
-		<div className="h-screen bg-black relative overflow-hidden">
+		<div 
+			ref={containerRef}
+			className={`bg-[#2068A6] relative overflow-hidden ${isFullscreen ? 'fixed inset-0 z-50' : 'h-screen'}`}
+		>
 			{/* Header */}
 			<div className="absolute top-0 left-0 right-0 z-20 pt-8 px-8 text-center">
 				<h1 className="text-6xl font-bold text-white mb-4 drop-shadow-2xl">
@@ -45,16 +76,17 @@ function VistaPami() {
 				{slides.map((slide, index) => (
 					<div
 						key={index}
-						className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"
+						className={`absolute inset-0 transition-opacity duration-1000 flex items-center justify-center ${index === currentSlide ? "opacity-100" : "opacity-0"
 							}`}
 					>
+						{/* Cambiamos object-cover por object-contain para ver la imagen completa */}
 						<img
 							src={slide}
 							alt={`Sede PAMI - Imagen ${index + 1}`}
-							className="w-full h-full object-cover transform scale-105"
+							className="max-w-full max-h-full object-contain"
 						/>
-						{/* Overlay para mejor contraste */}
-						<div className="absolute inset-0 bg-black/20"></div>
+						{/* Overlay para mejor contraste - ahora más sutil */}
+						<div className="absolute inset-0 bg-black/10"></div>
 					</div>
 				))}
 
@@ -71,6 +103,18 @@ function VistaPami() {
 					className="absolute right-4 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
 				>
 					<ChevronRight className="w-8 h-8 text-white group-hover:scale-110 transition-transform" />
+				</button>
+
+				{/* Botón de pantalla completa */}
+				<button
+					onClick={toggleFullscreen}
+					className="absolute top-4 right-4 z-30 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
+				>
+					{isFullscreen ? (
+						<Minimize className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+					) : (
+						<Expand className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+					)}
 				</button>
 
 				{/* Indicadores */}
