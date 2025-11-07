@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, Expand, Minimize } from "lucide-react";
-import IMG_PAMI from "./utils/imgPami";
+import IMG_PAMI from "../utils/imgPami";
 
-function VistaPami() {
+function Prepagadas() {
 	const [currentSlide, setCurrentSlide] = useState(0);
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const containerRef = useRef(null);
@@ -149,4 +149,4 @@ function VistaPami() {
 	);
 }
 
-export default VistaPami;
+export default Prepagadas;

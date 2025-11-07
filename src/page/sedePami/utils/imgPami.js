@@ -6,6 +6,7 @@ const IMG_PAMI = [
   "/pami/j.jpg",
   "/pami/v.jpg",
   "/pami/sd.jpg",
+  "/pami/siau.jpg",
 ];
 
 export default IMG_PAMI;
