@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Expand, Minimize } from "lucide-react";
 
 function Subsidiadas() {
+	const containerRef = useRef(null);
+	const [isFullscreen, setIsFullscreen] = useState(false);
+
+	const toggleFullscreen = () => {
+		if (!document.fullscreenElement) {
+			containerRef.current.requestFullscreen().catch(err => {
+				console.error(`Error attempting to enable fullscreen: ${err.message}`);
+			});
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			}
+		}
+	};
+
+	useEffect(() => {
+		const handleFullscreenChange = () => {
+			setIsFullscreen(!!document.fullscreenElement);
+		};
+
+		document.addEventListener('fullscreenchange', handleFullscreenChange);
+		return () => {
+			document.removeEventListener('fullscreenchange', handleFullscreenChange);
+		};
+	}, []);
+
 	return (
-		<div className="flex items-center justify-center h-screen bg-white overflow-hidden">
+		<div ref={containerRef} className="relative flex items-center justify-center h-screen bg-white overflow-hidden group">
+			<button
+				onClick={toggleFullscreen}
+				className={`absolute top-4 right-4 z-50 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-opacity duration-300 ${isFullscreen ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}
+			>
+				{isFullscreen ? <Minimize size={24} /> : <Expand size={24} />}
+			</button>
+
 			<iframe
-				src="https://docs.google.com/presentation/d/e/2PACX-1vSzUPZ1LhpEZwmrOjOAUHwpJeK7WqOs5ei45YVV4s0y1N-bb-suvjeEIvS27TDTnuMgc4vcNQmIpQJV/pub?start=true&loop=true&delayms=30000"
+				src="https://docs.google.com/presentation/d/e/2PACX-1vSzUPZ1LhpEZwmrOjOAUHwpJeK7WqOs5ei45YVV4s0y1N-bb-suvjeEIvS27TDTnuMgc4vcNQmIpQJV/pubembed?start=true&loop=true&delayms=30000"
 				frameBorder="0"
 				width="1440"
 				height="839"
